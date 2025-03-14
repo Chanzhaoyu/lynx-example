@@ -1,13 +1,30 @@
-import type { Picture } from '../Pictures/furnitures/furnituresPictures.jsx';
-import LikeImageCard from './LikeImageCard.jsx';
 import '../index.css';
+import { useEffect, useRef } from '@lynx-js/react';
+import type { NodesRef } from '@lynx-js/types';
+import LikeImageCard from './LikeImageCard.jsx';
+import type { Picture } from '../Pictures/furnitures/furnituresPictures.jsx';
 import { calculateEstimatedSize } from '../utils.jsx';
 
 export function Gallery(props: { pictureData: Picture[] }) {
   const { pictureData } = props;
+  const galleryRef = useRef<NodesRef>(null);
+
+  useEffect(() => {
+    galleryRef.current
+      ?.invoke({
+        method: 'autoScroll',
+        params: {
+          rate: '60',
+          start: true,
+        },
+      })
+      .exec();
+  }, []);
+
   return (
     <view className="gallery-wrapper single-card">
       <list
+        ref={galleryRef}
         className="list"
         list-type="waterfall"
         column-count={2}
